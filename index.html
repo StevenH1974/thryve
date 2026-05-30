@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thryve Home · Customer Portal</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+
+    <div id="app-wrapper">
+      <div class="app-wrapper">
+
+        <!-- LOGIN SCREEN -->
+        <div id="screen-login" class="screen active">
+
+          <div class="login-header">
+            <h1>THRYVE HOME</h1>
+            <p class="portal-label">CUSTOMER PORTAL</p>
+          </div>
+
+          <div class="login-card">
+            <h2>Welcome back</h2>
+            <p class="subtitle">Sign in to track your solar project</p>
+
+            <div class="input-group">
+              <label>Email address</label>
+              <input type="email" placeholder="your@email.com">
+            </div>
+
+            <div class="input-group">
+              <label>Password</label>
+              <input type="password" placeholder="••••••••••">
+            </div>
+
+            <button class="btn-primary">Sign In</button>
+
+            <div class="demo-buttons">
+              <p class="demo-label">Select a demo account to explore:</p>
+              <button class="btn-sarah" onclick="login('sarah')">Sign in as Sarah Johnson</button>
+              <button class="btn-michael" onclick="login('michael')">Sign in as Michael Torres</button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- DASHBOARD SCREEN -->
+        <div id="screen-dashboard" class="screen">
+
+          <div class="header">
+            <div class="header-top">
+              <div>
+                <p class="header-greeting">Welcome back</p>
+                <p id="dash-name" class="header-name"></p>
+                <p id="dash-project" class="header-project"></p>
+              </div>
+              <div id="dash-avatar" class="avatar"></div>
+            </div>
+          </div>
+
+          <div class="dash-info-bar">
+            <div class="dash-info-item">
+              <p class="dash-info-label">Current stage</p>
+              <p id="dash-stage" class="dash-info-value"></p>
+            </div>
+            <div class="dash-info-divider"></div>
+            <div class="dash-info-item">
+              <p class="dash-info-label">System size</p>
+              <p id="dash-system" class="dash-info-value"></p>
+            </div>
+          </div>
+
+          <div class="scroll-content">
+
+            <div class="card">
+              <div class="card-header">
+                <p class="card-title">Project timeline</p>
+                <p class="card-link" onclick="showScreen('timeline')">View all</p>
+              </div>
+              <div id="dash-timeline"></div>
+            </div>
+
+            <div class="quick-grid">
+
+              <div class="quick-card" onclick="showScreen('documents')">
+                <div class="quick-icon">📄</div>
+                <p class="quick-title">Documents</p>
+                <p class="quick-sub">4 files ready</p>
+              </div>
+
+              <div class="quick-card" onclick="showScreen('payments')">
+                <div class="quick-icon">💳</div>
+                <p class="quick-title">Payments</p>
+                <p class="quick-sub">Loan active</p>
+              </div>
+
+              <div class="quick-card" onclick="showScreen('messages')">
+                <div class="quick-icon">💬</div>
+                <p class="quick-title">Messages</p>
+                <p class="quick-sub">View updates</p>
+              </div>
+
+              <div class="quick-card" onclick="showScreen('timeline')">
+                <div class="quick-icon">📋</div>
+                <p class="quick-title">Permits</p>
+                <p id="dash-permit-status" class="quick-sub"></p>
+              </div>
+
+            </div>
+
+            <button onclick="logout()" class="btn-signout">Sign Out</button>
+
+          </div>
+
+        </div>
+
+        <!-- TIMELINE SCREEN -->
+        <div id="screen-timeline" class="screen">
+
+          <div class="header">
+            <div class="header-top">
+              <div class="back-btn" onclick="showScreen('dashboard')">←</div>
+              <p class="header-title">Project timeline</p>
+              <div style="width:32px;"></div>
+            </div>
+          </div>
+
+          <div class="scroll-content">
+
+            <div class="timeline-summary-card">
+              <div>
+                <p id="tl-name" class="tl-customer-name"></p>
+                <p id="tl-project" class="tl-project-num"></p>
+              </div>
+              <div style="text-align:right;">
+                <p class="tl-progress-label">Progress</p>
+                <p id="tl-progress" class="tl-progress-value"></p>
+              </div>
+            </div>
+
+            <div class="tl-progress-bar-track">
+              <div id="tl-progress-bar" class="tl-progress-bar-fill"></div>
+            </div>
+
+            <div id="tl-stages"></div>
+
+          </div>
+
+        </div>
+
+        <!-- DOCUMENTS SCREEN -->
+        <div id="screen-documents" class="screen">
+
+          <div class="header">
+            <div class="header-top">
+              <div class="back-btn" onclick="showScreen('dashboard')">←</div>
+              <p class="header-title">My documents</p>
+              <div style="width:32px;"></div>
+            </div>
+            <p id="docs-subtitle" class="header-subtitle"></p>
+          </div>
+
+          <div class="scroll-content">
+            <div id="docs-list"></div>
+          </div>
+
+        </div>
+
+        <!-- PAYMENTS SCREEN -->
+        <div id="screen-payments" class="screen">
+
+          <div class="header">
+            <div class="header-top">
+              <div class="back-btn" onclick="showScreen('dashboard')">←</div>
+              <p class="header-title">Payments & financing</p>
+              <div style="width:32px;"></div>
+            </div>
+          </div>
+
+          <div class="scroll-content">
+            <div id="payments-content"></div>
+          </div>
+
+        </div>
+
+        <!-- MESSAGES SCREEN -->
+        <div id="screen-messages" class="screen">
+
+          <div class="header">
+            <div class="header-top">
+              <div class="back-btn" onclick="showScreen('dashboard')">←</div>
+              <p class="header-title">Messages</p>
+              <div style="width:32px;"></div>
+            </div>
+            <p class="header-subtitle">Thryve Home support team</p>
+          </div>
+
+          <div class="messages-body" id="messages-body"></div>
+
+          <div class="message-input-bar">
+            <input type="text" id="message-input" placeholder="Type a message..." class="message-input">
+            <button class="message-send-btn" onclick="sendMessage()">➤</button>
+          </div>
+
+        </div>
+
+        <!-- NAVIGATION BAR -->
+        <div class="nav-bar" id="nav-bar" style="display:none;">
+          <div class="nav-item" onclick="showScreen('dashboard')" id="nav-home">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+          </div>
+          <div class="nav-item" onclick="showScreen('timeline')" id="nav-timeline">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Timeline</span>
+          </div>
+          <div class="nav-item" onclick="showScreen('documents')" id="nav-documents">
+            <span class="nav-icon">📄</span>
+            <span class="nav-label">Docs</span>
+          </div>
+          <div class="nav-item" onclick="showScreen('payments')" id="nav-payments">
+            <span class="nav-icon">💳</span>
+            <span class="nav-label">Payments</span>
+          </div>
+          <div class="nav-item" onclick="showScreen('messages')" id="nav-messages">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Messages</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+
+  </body>
+
+</html>
