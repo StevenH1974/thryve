@@ -91,6 +91,7 @@ const customers = {
 
 // ─── APP STATE ───────────────────────────────────────────
 let currentUser = null;
+let currentCustomer = null;
 
 // ─── SCREEN SWITCHING ────────────────────────────────────
 function showScreen(screenName) {
@@ -122,34 +123,45 @@ function showScreen(screenName) {
     }
 }
 // ─── LOGIN ───────────────────────────────────────────────
-function login(userKey) {
-    currentUser = userKey;
-    const c = customers[userKey];
+async function login() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
 
-    // Header
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        document.getElementById('login-error').textContent = 'Incorrect email or password. Please try again.';
+        return;
+    }
+
+    const userId = data.user.id;
+    const { data: customerData, error: customerError } = await db
+        .from('customers')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+    if (customerError || !customerData) {
+        document.getElementById('login-error').textContent = 'Account found but no project data exists yet.';
+        return;
+    }
+
+    currentCustomer = customerData;
+    loadDashboard();
+}
+
+function loadDashboard() {
+    const c = currentCustomer;
+
     document.getElementById('dash-name').textContent = c.name;
-    document.getElementById('dash-project').textContent = c.project;
-    document.getElementById('dash-avatar').textContent = c.initials;
-
-    // Info bar
+    document.getElementById('dash-project').textContent = c.project_number;
+    document.getElementById('dash-avatar').textContent = c.name.split(' ').map(n => n[0]).join('');
     document.getElementById('dash-stage').textContent = c.stage;
     document.getElementById('dash-system').textContent = c.system;
+    document.getElementById('dash-permit-status').textContent = c.stage;
 
-    // Timeline preview — first 5 stages from customer data
-    const timelineEl = document.getElementById('dash-timeline');
-    timelineEl.innerHTML = c.timeline.slice(0, 5).map(s => `
-        <div class="timeline-row">
-            <div class="timeline-left">
-                <div class="timeline-dot dot-${s.status}"></div>
-                <span class="timeline-label">${s.label}</span>
-            </div>
-            ${s.status !== 'upcoming' ? `
-                <span class="timeline-badge badge-${s.status}">
-                    ${s.status === 'complete' ? 'Complete' : 'In progress'}
-                </span>` : ''}
-        </div>
-    `).join('');
-document.getElementById('dash-permit-status').textContent = c.stage;
+    document.getElementById('dash-timeline').innerHTML = '';
+
     showScreen('dashboard');
 }
 

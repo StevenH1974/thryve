@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thryve Home · Customer Portal</title>
     <link rel="stylesheet" href="styles.css">
+ <!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = 'https://zlrdrbhvwvaxzcsauwvd.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_CFbY7rs7qMwD5oI34H0Mog_4wHvZ23h';
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
   </head>
 
   <body>
@@ -27,15 +35,16 @@
 
             <div class="input-group">
               <label>Email address</label>
-              <input type="email" placeholder="your@email.com">
+              <input type="email" id="login-email" placeholder="your@email.com">
             </div>
 
             <div class="input-group">
               <label>Password</label>
-              <input type="password" placeholder="••••••••••">
+             <input type="password" id="login-password" placeholder="••••••••••">
             </div>
 
-            <button class="btn-primary">Sign In</button>
+            <button class="btn-primary" onclick="login()">Sign In</button>
+<p id="login-error" style="color:red; font-size:14px; text-align:center; margin-top:8px;"></p>
 
             <div class="demo-buttons">
               <p class="demo-label">Select a demo account to explore:</p>
