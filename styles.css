@@ -826,3 +826,124 @@ input:focus {
   color: #1a3a6b;
   font-weight: 600;
 }
+
+/* ─── PAYMENTS REDESIGN ─────────────────────────────────── */
+
+.financing-header {
+    padding: 16px 0 8px 0;
+}
+
+.financing-type-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a2e4a;
+    margin: 0 0 4px 0;
+}
+
+.financing-date {
+    font-size: 13px;
+    color: #8a9ab5;
+    margin: 0 0 16px 0;
+}
+
+.make-payment-btn {
+    width: 100%;
+    padding: 16px;
+    background: #1a2e4a;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    margin: 16px 0;
+    cursor: pointer;
+}
+
+.make-payment-btn:active {
+    background: #2a4a6a;
+}
+
+.autopay-badge {
+    width: 100%;
+    padding: 14px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+    margin: 16px 0;
+    text-align: center;
+}
+
+.payment-flow-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 8px 0 16px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.payment-flow-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a2e4a;
+    margin: 0 0 16px 0;
+}
+
+.payment-flow-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    color: #4a5568;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.payment-flow-total {
+    font-weight: 700;
+    color: #1a2e4a;
+    border-bottom: none;
+    padding-top: 12px;
+}
+
+.payment-flow-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8a9ab5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 16px 0 10px 0;
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.payment-method-btn {
+    width: 100%;
+    padding: 14px;
+    background: #f7f9fc;
+    color: #1a2e4a;
+    font-size: 15px;
+    font-weight: 500;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.payment-method-btn:active {
+    background: #e8edf5;
+}
+
+.payment-flow-cancel {
+    width: 100%;
+    padding: 12px;
+    background: none;
+    color: #8a9ab5;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+}

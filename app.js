@@ -10,15 +10,15 @@ const customers = {
         email: 'sarah.johnson@email.com',
         phone: '(401) 555-0192',
         timeline: [
-            { label: 'Contract signed',        date: 'January 14, 2025',        status: 'complete', note: null },
-            { label: 'Financing approved',      date: 'January 22, 2025',        status: 'complete', note: null },
-            { label: 'Site survey',             date: 'February 8, 2025',        status: 'complete', note: null },
-            { label: 'Permits submitted',       date: 'March 2, 2025',           status: 'complete', note: null },
-            { label: 'Permits approved',        date: 'Awaiting municipality',    status: 'active',   note: 'Your permit is under review by the city. We will notify you when approved.' },
-            { label: 'Installation scheduled',  date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'Installation complete',   date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'Inspection',              date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'System activated',        date: 'Date to be confirmed',    status: 'upcoming', note: null },
+            { label: 'Financing approved',         date: 'January 22, 2025',        status: 'complete', note: null },
+            { label: 'Contract signed',             date: 'January 14, 2025',        status: 'complete', note: null },
+            { label: 'Site survey scheduled',       date: 'February 8, 2025',        status: 'complete', note: null },
+            { label: 'Permit application submitted',date: 'March 2, 2025',           status: 'complete', note: null },
+            { label: 'Application submitted',       date: 'Awaiting municipality',   status: 'active',   note: 'Your permit is under review by the city. We will notify you when approved.' },
+            { label: 'Installation scheduled',      date: 'Date to be confirmed',    status: 'upcoming', note: null },
+            { label: 'Installation complete',       date: 'Date to be confirmed',    status: 'upcoming', note: null },
+            { label: 'PTO approved',                date: 'Date to be confirmed',    status: 'upcoming', note: null },
+            { label: 'System turned on',            date: 'Date to be confirmed',    status: 'upcoming', note: null },
         ],
         documents: [
             { category: 'CONTRACT & AGREEMENTS', name: 'Solar installation contract', meta: 'Signed · Jan 14, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
@@ -28,12 +28,15 @@ const customers = {
             { category: 'INSPECTION & WARRANTY', name: 'Inspection report', meta: 'Available after inspection', badge: 'Upcoming', badgeClass: 'badge-upcoming', available: false },
             { category: null, name: '25-year product warranty', meta: 'Active · SunPower warranty', badge: 'Active', badgeClass: 'badge-active', available: true },
         ],
-        payments: {
-            loanStatus: 'Active',
+       payments: {
+            financingType: 'GoodLeap',
+            lender: 'GoodLeap',
             financedAmount: '$19,880',
-            monthlyPayment: '$138 / mo',
+            monthlyPayment: '$138',
             loanTerm: '25 years',
-            lender: 'Mosaic Solar Loans',
+            totalPayments: 300,
+            currentPayment: 1,
+            autopay: false,
             financingDate: 'January 22, 2025',
         },
         messages: [
@@ -225,11 +228,12 @@ function renderPayments() {
     const p = c.payments;
 
     document.getElementById('payments-content').innerHTML = `
+        <div class="financing-header">
+            <p class="financing-type-label">${p.financingType} Financing</p>
+            <p class="financing-date">Active since ${p.financingDate}</p>
+        </div>
+
         <div class="payment-grid">
-            <div class="payment-stat">
-                <p class="payment-stat-label">Loan status</p>
-                <p class="payment-stat-value">${p.loanStatus}</p>
-            </div>
             <div class="payment-stat">
                 <p class="payment-stat-label">Financed amount</p>
                 <p class="payment-stat-value">${p.financedAmount}</p>
@@ -242,17 +246,46 @@ function renderPayments() {
                 <p class="payment-stat-label">Loan term</p>
                 <p class="payment-stat-value">${p.loanTerm}</p>
             </div>
-        </div>
-
-        <div class="financing-status-card">
-            <span style="font-size:20px;">✓</span>
-            <div>
-                <p class="financing-status-text">Financing status</p>
-                <p class="financing-status-sub">${p.lender} · ${p.financingDate}</p>
+            <div class="payment-stat">
+                <p class="payment-stat-label">Payment</p>
+                <p class="payment-stat-value">${p.currentPayment} of ${p.totalPayments}</p>
             </div>
         </div>
 
-        <p class="section-label">LOAN DOCUMENTS</p>
+        ${!p.autopay ? `
+        <button class="make-payment-btn" onclick="showPaymentFlow()">
+            Make a Payment
+        </button>
+        ` : `
+        <div class="autopay-badge">✓ Autopay is active</div>
+        `}
+
+        <div id="payment-flow" style="display:none;">
+            <div class="payment-flow-card">
+                <p class="payment-flow-title">Payment Summary</p>
+                <div class="payment-flow-row">
+                    <span>Monthly payment</span>
+                    <span>${p.monthlyPayment}</span>
+                </div>
+                <div class="payment-flow-row">
+                    <span>ACH processing fee</span>
+                    <span>$10.00</span>
+                </div>
+                <div class="payment-flow-row payment-flow-total">
+                    <span>Total</span>
+                    <span>$${(parseFloat(p.monthlyPayment.replace(/[^0-9.]/g, '')) + 10).toFixed(2)}</span>
+                </div>
+                <p class="payment-flow-label">Select payment method</p>
+                <div class="payment-methods">
+                    <button class="payment-method-btn">ACH Bank Transfer</button>
+                    <button class="payment-method-btn">Credit / Debit Card</button>
+                    <button class="payment-method-btn">Venmo</button>
+                </div>
+                <button class="payment-flow-cancel" onclick="hidePaymentFlow()">Cancel</button>
+            </div>
+        </div>
+
+        <p class="section-label">FINANCING DOCUMENTS</p>
         <div class="doc-row">
             <div class="doc-icon">📄</div>
             <div class="doc-info">
@@ -269,12 +302,15 @@ function renderPayments() {
             </div>
             <span style="color:#8a9ab5; font-size:18px;">›</span>
         </div>
-
-        <div class="payment-note">
-            <span style="font-size:16px;">ℹ️</span>
-            <p class="payment-note-text">Payment amounts and lender details will pull from the live financing platform in the real app.</p>
-        </div>
     `;
+}
+
+function showPaymentFlow() {
+    document.getElementById('payment-flow').style.display = 'block';
+}
+
+function hidePaymentFlow() {
+    document.getElementById('payment-flow').style.display = 'none';
 }
 
 // ─── RENDER MESSAGES ─────────────────────────────────────
