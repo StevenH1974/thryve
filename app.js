@@ -167,15 +167,28 @@ function loadDashboard() {
 
 // ─── RENDER TIMELINE ─────────────────────────────────────
 function renderTimeline() {
-    const c = customers[currentUser];
+    const c = currentCustomer;
 
     // Summary card
     document.getElementById('tl-name').textContent = c.name;
-    document.getElementById('tl-project').textContent = c.project;
+    document.getElementById('tl-project').textContent = c.project_number;
+
+    // Use hardcoded stages but determine active stage from database
+    const stages = [
+        { label: 'Financing approved',          status: 'complete', date: 'January 22, 2025',      note: null },
+        { label: 'Contract signed',              status: 'complete', date: 'January 14, 2025',      note: null },
+        { label: 'Site survey scheduled',        status: 'complete', date: 'February 8, 2025',      note: null },
+        { label: 'Permit application submitted', status: 'complete', date: 'March 2, 2025',         note: null },
+        { label: 'Application submitted',        status: 'active',   date: 'Awaiting municipality', note: 'Your permit is under review by the city. We will notify you when approved.' },
+        { label: 'Installation scheduled',       status: 'upcoming', date: 'Date to be confirmed',  note: null },
+        { label: 'Installation complete',        status: 'upcoming', date: 'Date to be confirmed',  note: null },
+        { label: 'PTO approved',                 status: 'upcoming', date: 'Date to be confirmed',  note: null },
+        { label: 'System turned on',             status: 'upcoming', date: 'Date to be confirmed',  note: null },
+    ];
 
     // Progress count
-    const completed = c.timeline.filter(s => s.status === 'complete').length;
-    const total = c.timeline.length;
+    const completed = stages.filter(s => s.status === 'complete').length;
+    const total = stages.length;
     document.getElementById('tl-progress').textContent = completed + ' of ' + total + ' complete';
 
     // Progress bar width
@@ -184,7 +197,7 @@ function renderTimeline() {
 
     // Build stage rows
     const stagesEl = document.getElementById('tl-stages');
-    stagesEl.innerHTML = c.timeline.map(stage => {
+    stagesEl.innerHTML = stages.map(stage => {
         const isUpcoming = stage.status === 'upcoming';
         return `
             <div class="tl-stage-row">
@@ -208,13 +221,21 @@ function renderTimeline() {
 
 // ─── RENDER DOCUMENTS ────────────────────────────────────
 function renderDocuments() {
-    const c = customers[currentUser];
-    document.getElementById('docs-subtitle').textContent = c.name + ' · ' + c.project;
+    const c = currentCustomer;
+    document.getElementById('docs-subtitle').textContent = c.name + ' · ' + c.project_number;
+
+    const documents = [
+        { category: 'CONTRACT & AGREEMENTS', name: 'Solar installation contract', meta: 'Signed · Jan 14, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
+        { category: null, name: 'Signed proposal', meta: 'Signed · Jan 12, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
+        { category: 'PERMITS & APPROVALS', name: 'Building permit application', meta: 'Submitted · Mar 2, 2025 · PDF', badge: 'In review', badgeClass: 'badge-review', available: true },
+        { category: null, name: 'Electrical permit', meta: 'Pending · Not yet available', badge: 'Pending', badgeClass: 'badge-pending', available: false },
+        { category: 'INSPECTION & WARRANTY', name: 'Inspection report', meta: 'Available after inspection', badge: 'Upcoming', badgeClass: 'badge-upcoming', available: false },
+    ];
 
     let html = '';
     let lastCategory = null;
 
-    c.documents.forEach(doc => {
+    documents.forEach(doc => {
         if (doc.category && doc.category !== lastCategory) {
             html += `<p class="doc-category">${doc.category}</p>`;
             lastCategory = doc.category;
@@ -236,35 +257,44 @@ function renderDocuments() {
 
 // ─── RENDER PAYMENTS ─────────────────────────────────────
 function renderPayments() {
-    const c = customers[currentUser];
-    const p = c.payments;
+    const c = currentCustomer;
+
+    const financingType = c.financing_type || 'GoodLeap';
+    const monthlyPayment = c.monthly_payment || '138';
+    const financedAmount = '$19,880';
+    const loanTerm = '25 years';
+    const totalPayments = 300;
+    const currentPayment = 1;
+    const autopay = false;
+    const lender = financingType;
+    const financingDate = 'January 22, 2025';
 
     document.getElementById('payments-content').innerHTML = `
         <div class="financing-header">
-            <p class="financing-type-label">${p.financingType} Financing</p>
-            <p class="financing-date">Active since ${p.financingDate}</p>
+            <p class="financing-type-label">${financingType} Financing</p>
+            <p class="financing-date">Active since ${financingDate}</p>
         </div>
 
         <div class="payment-grid">
             <div class="payment-stat">
                 <p class="payment-stat-label">Financed amount</p>
-                <p class="payment-stat-value">${p.financedAmount}</p>
+                <p class="payment-stat-value">${financedAmount}</p>
             </div>
             <div class="payment-stat">
                 <p class="payment-stat-label">Monthly payment</p>
-                <p class="payment-stat-value">${p.monthlyPayment}</p>
+                <p class="payment-stat-value">$${monthlyPayment}</p>
             </div>
             <div class="payment-stat">
                 <p class="payment-stat-label">Loan term</p>
-                <p class="payment-stat-value">${p.loanTerm}</p>
+                <p class="payment-stat-value">${loanTerm}</p>
             </div>
             <div class="payment-stat">
                 <p class="payment-stat-label">Payment</p>
-                <p class="payment-stat-value">${p.currentPayment} of ${p.totalPayments}</p>
+                <p class="payment-stat-value">${currentPayment} of ${totalPayments}</p>
             </div>
         </div>
 
-        ${!p.autopay ? `
+        ${!autopay ? `
         <button class="make-payment-btn" onclick="showPaymentFlow()">
             Make a Payment
         </button>
@@ -277,7 +307,7 @@ function renderPayments() {
                 <p class="payment-flow-title">Payment Summary</p>
                 <div class="payment-flow-row">
                     <span>Monthly payment</span>
-                    <span>${p.monthlyPayment}</span>
+                    <span>$${monthlyPayment}</span>
                 </div>
                 <div class="payment-flow-row">
                     <span>ACH processing fee</span>
@@ -285,7 +315,7 @@ function renderPayments() {
                 </div>
                 <div class="payment-flow-row payment-flow-total">
                     <span>Total</span>
-                    <span>$${(parseFloat(p.monthlyPayment.replace(/[^0-9.]/g, '')) + 10).toFixed(2)}</span>
+                    <span>$${(parseFloat(monthlyPayment) + 10).toFixed(2)}</span>
                 </div>
                 <p class="payment-flow-label">Select payment method</p>
                 <div class="payment-methods">
@@ -302,7 +332,7 @@ function renderPayments() {
             <div class="doc-icon">📄</div>
             <div class="doc-info">
                 <p class="doc-name">Loan agreement</p>
-                <p class="doc-meta">${p.lender}</p>
+                <p class="doc-meta">${lender}</p>
             </div>
             <span style="color:#8a9ab5; font-size:18px;">›</span>
         </div>
@@ -326,10 +356,15 @@ function hidePaymentFlow() {
 }
 
 // ─── RENDER MESSAGES ─────────────────────────────────────
-function renderMessages() {
-    const c = customers[currentUser];
+const sessionMessages = [
+    { sender: 'thryve', text: 'Welcome to Thryve Home! Your solar project is underway. Feel free to message us anytime.', time: 'January 22, 2025', type: 'normal' },
+    { type: 'update', label: 'PROJECT UPDATE', text: 'Your permit application has been submitted to the municipality.', time: 'March 2, 2025' },
+    { sender: 'customer', text: 'How long does the permit usually take?', time: 'March 3, 2025', type: 'normal' },
+    { sender: 'thryve', text: 'Typically 2-4 weeks depending on the municipality. We will notify you as soon as it is approved!', time: 'March 3, 2025', type: 'normal' },
+];
 
-    const html = c.messages.map(msg => {
+function renderMessages() {
+    const html = sessionMessages.map(msg => {
         if (msg.type === 'update') {
             return `
                 <div class="message-group">
@@ -368,16 +403,25 @@ function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
 
-    const c = customers[currentUser];
-    c.messages.push({
+    sessionMessages.push({
         sender: 'customer',
         text: text,
         time: 'Just now',
         type: 'normal'
     });
 
-    input.value = '';
+ input.value = '';
     renderMessages();
+
+    setTimeout(() => {
+        sessionMessages.push({
+            sender: 'thryve',
+            text: 'Thanks for reaching out! A member of our team will respond within 1 business day.',
+            time: 'Just now',
+            type: 'normal'
+        });
+        renderMessages();
+    }, 1000);
 }
 
 // ─── LOGOUT ──────────────────────────────────────────────
