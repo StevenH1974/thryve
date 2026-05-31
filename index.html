@@ -38,20 +38,15 @@
               <input type="email" id="login-email" placeholder="your@email.com">
             </div>
 
-            <div class="input-group">
-              <label>Password</label>
-             <input type="password" id="login-password" placeholder="••••••••••">
-            </div>
+           <div style="position:relative;">
+    <input type="password" id="login-password" placeholder="••••••••••" style="width:100%; padding-right:44px; box-sizing:border-box;">
+    <button onclick="togglePassword()" type="button" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; 
+  cursor:pointer; font-size:18px; color:#8a9ab5;">⊙</button>  
+</div>
 
             <button class="btn-primary" onclick="login()">Sign In</button>
-<p id="login-error" style="color:red; font-size:14px; text-align:center; margin-top:8px;"></p>
-
-            <div class="demo-buttons">
-              <p class="demo-label">Select a demo account to explore:</p>
-              <button class="btn-sarah" onclick="login('sarah')">Sign in as Sarah Johnson</button>
-              <button class="btn-michael" onclick="login('michael')">Sign in as Michael Torres</button>
-            </div>
-
+              <p style="text-align:center; margin-top:12px;"><a href="#" onclick="forgotPassword()" style="color:#8a9ab5; font-size:14px;">Forgot password?</a></p>     
+              <p id="login-error" style="color:red; font-size:14px; text-align:center; margin-top:8px;"></p>
           </div>
 
         </div>

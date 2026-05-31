@@ -46,47 +46,7 @@ const customers = {
             { sender: 'thryve', text: 'Good news Sarah! Your permit is still under review but everything looks on track. We expect to hear back within the next 1 to 2 weeks.', time: 'Thryve Home · Today · 9:02 AM', type: 'update', label: 'PROJECT UPDATE' },
         ]
     },
-    michael: {
-        name: 'Michael Torres',
-        initials: 'MT',
-        project: 'Project #THR-2025-0124',
-        stage: 'Financing approved',
-        system: '11.2 kW',
-        address: '87 Riverside Drive, Cranston, RI 02910',
-        email: 'michael.torres@email.com',
-        phone: '(401) 555-0347',
-        timeline: [
-            { label: 'Contract signed',        date: 'March 10, 2025',          status: 'complete', note: null },
-            { label: 'Financing approved',      date: 'March 18, 2025',          status: 'active',   note: 'Your financing has been approved. We will begin scheduling your site survey.' },
-            { label: 'Site survey',             date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'Permits submitted',       date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'Permits approved',        date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'Installation scheduled',  date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'Installation complete',   date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'Inspection',              date: 'Date to be confirmed',    status: 'upcoming', note: null },
-            { label: 'System activated',        date: 'Date to be confirmed',    status: 'upcoming', note: null },
-        ],
-        documents: [
-            { category: 'CONTRACT & AGREEMENTS', name: 'Solar installation contract', meta: 'Signed · Mar 10, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
-            { category: null, name: 'Signed proposal', meta: 'Signed · Mar 8, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
-            { category: 'FINANCING', name: 'Loan agreement', meta: 'Signed · Mar 18, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
-            { category: null, name: 'Federal tax credit guide', meta: '30% ITC · How to claim your credit', badge: 'Active', badgeClass: 'badge-active', available: true },
-            { category: 'PERMITS & APPROVALS', name: 'Building permit application', meta: 'Not yet submitted', badge: 'Upcoming', badgeClass: 'badge-upcoming', available: false },
-        ],
-        payments: {
-            loanStatus: 'Active',
-            financedAmount: '$28,450',
-            monthlyPayment: '$198 / mo',
-            loanTerm: '25 years',
-            lender: 'Mosaic Solar Loans',
-            financingDate: 'March 18, 2025',
-        },
-        messages: [
-            { sender: 'thryve', text: 'Welcome Michael! Your contract has been signed and your financing is approved. We are excited to get started on your solar installation!', time: 'Thryve Home · Mar 18 · 2:00 PM', type: 'normal' },
-            { sender: 'customer', text: 'Great! When will you schedule the site survey?', time: 'Michael · Mar 18 · 2:45 PM', type: 'normal' },
-            { sender: 'thryve', text: 'We will reach out within the next few business days to schedule your site survey. It typically takes about an hour.', time: 'Thryve Home · Mar 18 · 3:10 PM', type: 'normal' },
-        ]
-    }
+   
 };
 
 // ─── APP STATE ───────────────────────────────────────────
@@ -425,7 +385,31 @@ function sendMessage() {
 }
 
 // ─── LOGOUT ──────────────────────────────────────────────
-function logout() {
+async function logout() {
+    await db.auth.signOut();
     currentUser = null;
+    currentCustomer = null;
     showScreen('login');
+}
+
+// ─── TOGGLE PASSWORD VISIBILITY ───────────────────────────
+function togglePassword() {
+    const input = document.getElementById('login-password');
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+// ─── FORGOT PASSWORD ──────────────────────────────────────
+async function forgotPassword() {
+    const email = document.getElementById('login-email').value;
+    if (!email) {
+        document.getElementById('login-error').textContent = 'Please enter your email address first.';
+        return;
+    }
+    const { error } = await db.auth.resetPasswordForEmail(email);
+    if (error) {
+        document.getElementById('login-error').textContent = 'Something went wrong. Please try again.';
+    } else {
+        document.getElementById('login-error').style.color = 'green';
+        document.getElementById('login-error').textContent = 'Password reset email sent! Check your inbox.';
+    }
 }
