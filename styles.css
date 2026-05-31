@@ -19,14 +19,15 @@ html, body {
 }
 
 .app-wrapper {
-  width: 100%;
-  max-width: 430px;
-  min-height: 100vh;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
+    width: 100%;
+    max-width: 430px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    max-height: 100vh;
 }
 
 .login-screen {
@@ -118,13 +119,13 @@ input:focus {
   background-color: #4a90d9;
 }
 .screen {
-  display: none;
-  flex-direction: column;
-  min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .screen.active {
-  display: flex;
+    display: flex;
 }
 
 .header {
@@ -134,10 +135,13 @@ input:focus {
 }
 
 .scroll-content {
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
-  background-color: #f0f4fa;
+    flex: 1;
+    padding: 16px;
+    padding-bottom: 72px;
+    overflow-y: auto;
+    background-color: #f0f4fa;
+    -webkit-overflow-scrolling: touch;
+    min-height: 0;
 }
 
 .card {
@@ -796,11 +800,14 @@ input:focus {
 
 /* ── NAVIGATION BAR ── */
 .nav-bar {
-  background: white;
-  border-top: 0.5px solid #e2eaf5;
-  display: flex;
-  padding: 8px 0 20px;
-  flex-shrink: 0;
+    background: white;
+    border-top: 0.5px solid #e2eaf5;
+    display: flex;
+    padding: 8px 0 20px;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
 }
 
 .nav-item {
