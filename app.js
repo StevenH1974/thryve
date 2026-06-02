@@ -1,3 +1,159 @@
+// ─── TRANSLATIONS ─────────────────────────────────────
+const translations = {
+  en: {
+    // Login
+    welcomeBack: 'Welcome back',
+    signInSubtitle: 'Sign in to track your solar project',
+    emailLabel: 'Email address',
+    passwordLabel: 'Password',
+    showPassword: 'Show',
+    hidePassword: 'Hide',
+    forgotPassword: 'Forgot password?',
+    signIn: 'Sign In',
+    newCustomer: 'New customer?',
+    createAccount: 'Create your account',
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
+    // Dashboard
+    welcomeBackDash: 'Welcome back',
+    currentStage: 'Current stage',
+    systemSize: 'System size',
+    projectTimeline: 'Project timeline',
+    viewAll: 'View all',
+    documents: 'Documents',
+    filesReady: 'files ready',
+    payments: 'Payments',
+    loanActive: 'Loan active',
+    messages: 'Messages',
+    viewUpdates: 'View updates',
+    incentiveDiscount: 'Incentive Discount',
+    signOut: 'Sign Out',
+    // Timeline
+    progress: 'Progress',
+    complete: 'Complete',
+    inProgress: 'In progress',
+    upcoming: 'Upcoming',
+    dateToBeConfirmed: 'Date to be confirmed',
+    awaitingMunicipality: 'Awaiting municipality',
+    permitUnderReview: 'Your permit is under review by the city. We will notify you when approved.',
+    // Documents
+    myDocuments: 'My documents',
+    contractAgreements: 'Contract & Agreements',
+    permitsApprovals: 'Permits & Approvals',
+    inspectionWarranty: 'Inspection & Warranty',
+    signed: 'Signed',
+    inReview: 'In review',
+    pending: 'Pending',
+    // Payments
+    paymentsFinancing: 'Payments & financing',
+    activeSince: 'Active since',
+    financedAmount: 'Financed amount',
+    monthlyPayment: 'Monthly payment',
+    loanTerm: 'Loan term',
+    payment: 'Payment',
+    makePayment: 'Make a Payment',
+    paymentSummary: 'Payment Summary',
+    achFee: 'ACH processing fee',
+    total: 'Total',
+    selectPaymentMethod: 'SELECT PAYMENT METHOD',
+    achTransfer: 'ACH Bank Transfer',
+    creditDebit: 'Credit / Debit Card',
+    venmo: 'Venmo',
+    cancel: 'Cancel',
+    financingDocuments: 'FINANCING DOCUMENTS',
+    // Messages
+    supportTeam: 'Thryve Home support team',
+    typeMessage: 'Type a message...',
+    // Incentive Discount
+    yourProjectIncentives: 'Your project incentives',
+    comingSoon: 'Coming Soon',
+    incentiveComingSoonText: 'Your incentive discount details will appear here once your project is underway.',
+    // Nav
+    navHome: 'Home',
+    navTimeline: 'Timeline',
+    navDocs: 'Docs',
+    navPayments: 'Payments',
+    navMessages: 'Messages',
+  },
+  es: {
+    // Login
+    welcomeBack: 'Bienvenido',
+    signInSubtitle: 'Inicia sesión para rastrear tu proyecto solar',
+    emailLabel: 'Correo electrónico',
+    passwordLabel: 'Contraseña',
+    showPassword: 'Mostrar',
+    hidePassword: 'Ocultar',
+    forgotPassword: '¿Olvidaste tu contraseña?',
+    signIn: 'Iniciar sesión',
+    newCustomer: '¿Eres nuevo cliente?',
+    createAccount: 'Crea tu cuenta',
+    privacyPolicy: 'Política de privacidad',
+    termsOfService: 'Términos de servicio',
+    // Dashboard
+    welcomeBackDash: 'Bienvenido de vuelta',
+    currentStage: 'Etapa actual',
+    systemSize: 'Tamaño del sistema',
+    projectTimeline: 'Cronograma del proyecto',
+    viewAll: 'Ver todo',
+    documents: 'Documentos',
+    filesReady: 'archivos listos',
+    payments: 'Pagos',
+    loanActive: 'Préstamo activo',
+    messages: 'Mensajes',
+    viewUpdates: 'Ver actualizaciones',
+    incentiveDiscount: 'Descuento de incentivo',
+    signOut: 'Cerrar sesión',
+    // Timeline
+    progress: 'Progreso',
+    complete: 'Completado',
+    inProgress: 'En progreso',
+    upcoming: 'Próximamente',
+    dateToBeConfirmed: 'Fecha por confirmar',
+    awaitingMunicipality: 'Esperando municipio',
+    permitUnderReview: 'Tu permiso está siendo revisado por la ciudad. Te notificaremos cuando sea aprobado.',
+    // Documents
+    myDocuments: 'Mis documentos',
+    contractAgreements: 'Contrato y acuerdos',
+    permitsApprovals: 'Permisos y aprobaciones',
+    inspectionWarranty: 'Inspección y garantía',
+    signed: 'Firmado',
+    inReview: 'En revisión',
+    pending: 'Pendiente',
+    // Payments
+    paymentsFinancing: 'Pagos y financiamiento',
+    activeSince: 'Activo desde',
+    financedAmount: 'Monto financiado',
+    monthlyPayment: 'Pago mensual',
+    loanTerm: 'Plazo del préstamo',
+    payment: 'Pago',
+    makePayment: 'Realizar un pago',
+    paymentSummary: 'Resumen de pago',
+    achFee: 'Cargo por procesamiento ACH',
+    total: 'Total',
+    selectPaymentMethod: 'SELECCIONAR MÉTODO DE PAGO',
+    achTransfer: 'Transferencia bancaria ACH',
+    creditDebit: 'Tarjeta de crédito / débito',
+    venmo: 'Venmo',
+    cancel: 'Cancelar',
+    financingDocuments: 'DOCUMENTOS DE FINANCIAMIENTO',
+    // Messages
+    supportTeam: 'Equipo de soporte Thryve Home',
+    typeMessage: 'Escribe un mensaje...',
+    // Incentive Discount
+    yourProjectIncentives: 'Tus incentivos del proyecto',
+    comingSoon: 'Próximamente',
+    incentiveComingSoonText: 'Los detalles de tu descuento de incentivo aparecerán aquí cuando tu proyecto esté en marcha.',
+    // Nav
+    navHome: 'Inicio',
+    navTimeline: 'Cronograma',
+    navDocs: 'Docs',
+    navPayments: 'Pagos',
+    navMessages: 'Mensajes',
+  }
+};
+
+let currentLang = localStorage.getItem('thryve_lang') || 'en';
+
 // ─── CUSTOMER DATA ───────────────────────────────────────
 const customers = {
     sarah: {
@@ -112,6 +268,7 @@ async function login() {
 
 function loadDashboard() {
     const c = currentCustomer;
+    const t = translations[currentLang];
 
     document.getElementById('dash-name').textContent = c.name;
     document.getElementById('dash-project').textContent = c.project_number;
@@ -122,34 +279,80 @@ function loadDashboard() {
 
     document.getElementById('dash-timeline').innerHTML = '';
 
+    // Apply translations to dashboard
+    const setT = (selector, text) => {
+        const el = document.querySelector(selector);
+        if (el) el.textContent = text;
+    };
+
+    setT('.header-greeting', t.welcomeBackDash);
+    setT('#dash-current-stage-label', t.currentStage);
+    setT('#dash-system-size-label', t.systemSize);
+    setT('#dash-timeline-label', t.projectTimeline);
+    setT('#dash-view-all', t.viewAll);
+    setT('[onclick="showScreen(\'timeline\')"] .card-title', t.projectTimeline);
+    setT('[onclick="showScreen(\'timeline\')"] .card-link', t.viewAll);
+    setT('[onclick="showScreen(\'documents\')"] .quick-title', t.documents);
+    setT('[onclick="showScreen(\'payments\')"] .quick-title', t.payments);
+    setT('[onclick="showScreen(\'payments\')"] .quick-sub', t.loanActive);
+    setT('[onclick="showScreen(\'messages\')"] .quick-title', t.messages);
+    setT('[onclick="showScreen(\'messages\')"] .quick-sub', t.viewUpdates);
+    setT('[onclick="showScreen(\'incentive\')"] .quick-title', t.incentiveDiscount);
+    setT('.btn-signout', t.signOut);
+
     showScreen('dashboard');
 }
 
 // ─── RENDER TIMELINE ─────────────────────────────────────
 function renderTimeline() {
     const c = currentCustomer;
+    const t = translations[currentLang];
 
     // Summary card
     document.getElementById('tl-name').textContent = c.name;
     document.getElementById('tl-project').textContent = c.project_number;
 
-    // Use hardcoded stages but determine active stage from database
     const stages = [
-        { label: 'Financing approved',          status: 'complete', date: 'January 22, 2025',      note: null },
-        { label: 'Contract signed',              status: 'complete', date: 'January 14, 2025',      note: null },
-        { label: 'Site survey scheduled',        status: 'complete', date: 'February 8, 2025',      note: null },
-        { label: 'Permit application submitted', status: 'complete', date: 'March 2, 2025',         note: null },
-        { label: 'Application submitted',        status: 'active',   date: 'Awaiting municipality', note: 'Your permit is under review by the city. We will notify you when approved.' },
-        { label: 'Installation scheduled',       status: 'upcoming', date: 'Date to be confirmed',  note: null },
-        { label: 'Installation complete',        status: 'upcoming', date: 'Date to be confirmed',  note: null },
-        { label: 'PTO approved',                 status: 'upcoming', date: 'Date to be confirmed',  note: null },
-        { label: 'System turned on',             status: 'upcoming', date: 'Date to be confirmed',  note: null },
+        { labelKey: 'Financing approved',          status: 'complete', date: 'January 22, 2025',      note: null },
+        { labelKey: 'Contract signed',              status: 'complete', date: 'January 14, 2025',      note: null },
+        { labelKey: 'Site survey scheduled',        status: 'complete', date: 'February 8, 2025',      note: null },
+        { labelKey: 'Permit application submitted', status: 'complete', date: 'March 2, 2025',         note: null },
+        { labelKey: 'Application submitted',        status: 'active',   date: t.awaitingMunicipality,  note: t.permitUnderReview },
+        { labelKey: 'Installation scheduled',       status: 'upcoming', date: t.dateToBeConfirmed,     note: null },
+        { labelKey: 'Installation complete',        status: 'upcoming', date: t.dateToBeConfirmed,     note: null },
+        { labelKey: 'PTO approved',                 status: 'upcoming', date: t.dateToBeConfirmed,     note: null },
+        { labelKey: 'System turned on',             status: 'upcoming', date: t.dateToBeConfirmed,     note: null },
     ];
+
+    const stageNames = {
+        en: {
+            'Financing approved': 'Financing approved',
+            'Contract signed': 'Contract signed',
+            'Site survey scheduled': 'Site survey scheduled',
+            'Permit application submitted': 'Permit application submitted',
+            'Application submitted': 'Application submitted',
+            'Installation scheduled': 'Installation scheduled',
+            'Installation complete': 'Installation complete',
+            'PTO approved': 'PTO approved',
+            'System turned on': 'System turned on',
+        },
+        es: {
+            'Financing approved': 'Financiamiento aprobado',
+            'Contract signed': 'Contrato firmado',
+            'Site survey scheduled': 'Inspección del sitio programada',
+            'Permit application submitted': 'Solicitud de permiso enviada',
+            'Application submitted': 'Solicitud enviada',
+            'Installation scheduled': 'Instalación programada',
+            'Installation complete': 'Instalación completa',
+            'PTO approved': 'PTO aprobado',
+            'System turned on': 'Sistema encendido',
+        }
+    };
 
     // Progress count
     const completed = stages.filter(s => s.status === 'complete').length;
     const total = stages.length;
-    document.getElementById('tl-progress').textContent = completed + ' of ' + total + ' complete';
+    document.getElementById('tl-progress').textContent = completed + ' of ' + total + ' ' + t.complete;
 
     // Progress bar width
     const pct = Math.round((completed / total) * 100);
@@ -159,6 +362,8 @@ function renderTimeline() {
     const stagesEl = document.getElementById('tl-stages');
     stagesEl.innerHTML = stages.map(stage => {
         const isUpcoming = stage.status === 'upcoming';
+        const label = stageNames[currentLang][stage.labelKey];
+        const badge = stage.status === 'complete' ? t.complete : stage.status === 'active' ? t.inProgress : t.upcoming;
         return `
             <div class="tl-stage-row">
                 <div class="tl-circle tl-circle-${stage.status}">
@@ -166,10 +371,8 @@ function renderTimeline() {
                 </div>
                 <div class="tl-card ${stage.status === 'active' ? 'tl-card-active' : ''}">
                     <div class="tl-card-header">
-                        <span class="tl-stage-name ${isUpcoming ? 'tl-stage-name-upcoming' : ''}">${stage.label}</span>
-                        <span class="tl-badge tl-badge-${stage.status}">
-                            ${stage.status === 'complete' ? 'Complete' : stage.status === 'active' ? 'In progress' : 'Upcoming'}
-                        </span>
+                        <span class="tl-stage-name ${isUpcoming ? 'tl-stage-name-upcoming' : ''}">${label}</span>
+                        <span class="tl-badge tl-badge-${stage.status}">${badge}</span>
                     </div>
                     <p class="tl-stage-date">${stage.date}</p>
                     ${stage.note ? `<div class="tl-note">${stage.note}</div>` : ''}
@@ -392,6 +595,61 @@ async function logout() {
     showScreen('login');
 }
 
+// ─── LANGUAGE TOGGLE ──────────────────────────────────
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('thryve_lang', lang);
+  const t = translations[lang];
+
+  // Login
+  document.querySelector('#screen-login h2').textContent = t.welcomeBack;
+  document.querySelector('#screen-login .subtitle').textContent = t.signInSubtitle;
+  document.querySelector('#screen-login label').textContent = t.emailLabel;
+  document.querySelectorAll('#screen-login label')[1].textContent = t.passwordLabel;
+  document.querySelector('#screen-login .btn-primary').textContent = t.signIn;
+  document.querySelector('#screen-login .btn-secondary').textContent = t.createAccount;
+  document.querySelector('#screen-login [onclick="forgotPassword()"]').textContent = t.forgotPassword;
+  document.querySelector('#screen-login p[style*="New customer"]') !== null;
+  const newCustP = [...document.querySelectorAll('#screen-login p')].find(p => p.textContent.includes('New customer') || p.textContent.includes('nuevo cliente'));
+  if (newCustP) newCustP.textContent = t.newCustomer;
+  const privacyLink = document.querySelector('#screen-login a[href="#"]:first-of-type');
+
+  // Nav bar
+  document.querySelector('#nav-home .nav-label').textContent = t.navHome;
+  document.querySelector('#nav-timeline .nav-label').textContent = t.navTimeline;
+  document.querySelector('#nav-documents .nav-label').textContent = t.navDocs;
+  document.querySelector('#nav-payments .nav-label').textContent = t.navPayments;
+  document.querySelector('#nav-messages .nav-label').textContent = t.navMessages;
+
+  // Dashboard static labels
+  const dashGreeting = document.querySelector('#screen-dashboard .header-greeting');
+  if (dashGreeting) dashGreeting.textContent = t.welcomeBackDash;
+
+  // Incentive Discount screen
+  document.querySelector('#screen-incentive .header-title').textContent = t.incentiveDiscount;
+  document.querySelector('#screen-incentive .header-subtitle').textContent = t.yourProjectIncentives;
+  const comingSoonP = document.querySelectorAll('#screen-incentive .scroll-content p');
+  if (comingSoonP[1]) comingSoonP[1].textContent = t.comingSoon;
+  if (comingSoonP[2]) comingSoonP[2].textContent = t.incentiveComingSoonText;
+
+  // Messages screen
+  document.querySelector('#screen-messages .header-subtitle').textContent = t.supportTeam;
+  document.querySelector('#message-input').placeholder = t.typeMessage;
+
+  // Documents screen
+  document.querySelector('#screen-documents .header-title').textContent = t.myDocuments;
+
+  // Payments screen
+  document.querySelector('#screen-payments .header-title').textContent = t.paymentsFinancing;
+
+  // Timeline screen
+  document.querySelector('#screen-timeline .header-title').textContent = t.projectTimeline;
+
+  // Update flag buttons
+  document.getElementById('lang-en').style.opacity = lang === 'en' ? '1' : '0.4';
+  document.getElementById('lang-es').style.opacity = lang === 'es' ? '1' : '0.4';
+}
+
 // ─── TOGGLE PASSWORD VISIBILITY ───────────────────────────
 function togglePassword() {
   const input = document.getElementById('login-password');
@@ -420,3 +678,11 @@ async function forgotPassword() {
         document.getElementById('login-error').textContent = 'Password reset email sent! Check your inbox.';
     }
 }
+
+// ─── APP INIT ─────────────────────────────────────────────
+function initLanguage() {
+  const savedLang = localStorage.getItem('thryve_lang') || 'en';
+  setLanguage(savedLang);
+}
+
+initLanguage();

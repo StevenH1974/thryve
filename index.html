@@ -25,9 +25,15 @@
         <div id="screen-login" class="screen active">
 
           <div class="login-header">
-            <h1>THRYVE HOME</h1>
-            <p class="portal-label">CUSTOMER PORTAL</p>
-          </div>
+  <div style="position:relative;">
+    <h1>THRYVE HOME</h1>
+    <p class="portal-label">CUSTOMER PORTAL</p>
+    <div style="position:absolute; top:0; right:0; display:flex; gap:8px;">
+      <button id="lang-en" onclick="setLanguage('en')" style="background:none; border:none; cursor:pointer; font-size:24px; opacity:1;">🇺🇸</button>
+      <button id="lang-es" onclick="setLanguage('es')" style="background:none; border:none; cursor:pointer; font-size:24px; opacity:0.4;">🇪🇸</button>
+    </div>
+  </div>
+</div>
 
           <div class="login-card">
             <h2>Welcome back</h2>
@@ -63,7 +69,7 @@
 
         </div>
 
-        <!-- DASHBOARD SCREEN -->
+<!-- DASHBOARD SCREEN -->
         <div id="screen-dashboard" class="screen">
 
           <div class="header">
@@ -79,12 +85,12 @@
 
           <div class="dash-info-bar">
             <div class="dash-info-item">
-              <p class="dash-info-label">Current stage</p>
+              <p id="dash-current-stage-label" class="dash-info-label">Current stage</p>
               <p id="dash-stage" class="dash-info-value"></p>
             </div>
             <div class="dash-info-divider"></div>
             <div class="dash-info-item">
-              <p class="dash-info-label">System size</p>
+              <p id="dash-system-size-label" class="dash-info-label">System size</p>
               <p id="dash-system" class="dash-info-value"></p>
             </div>
           </div>
@@ -93,8 +99,8 @@
 
             <div class="card">
               <div class="card-header">
-                <p class="card-title">Project timeline</p>
-                <p class="card-link" onclick="showScreen('timeline')">View all</p>
+                <p id="dash-timeline-label" class="card-title">Project timeline</p>
+                <p id="dash-view-all" class="card-link" onclick="showScreen('timeline')">View all</p>
               </div>
               <div id="dash-timeline"></div>
             </div>
