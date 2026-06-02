@@ -394,8 +394,15 @@ async function logout() {
 
 // ─── TOGGLE PASSWORD VISIBILITY ───────────────────────────
 function togglePassword() {
-    const input = document.getElementById('login-password');
-    input.type = input.type === 'password' ? 'text' : 'password';
+  const input = document.getElementById('login-password');
+  const btn = document.querySelector('#screen-login button[onclick="togglePassword()"]');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = 'Hide';
+  } else {
+    input.type = 'password';
+    btn.textContent = 'Show';
+  }
 }
 
 // ─── FORGOT PASSWORD ──────────────────────────────────────

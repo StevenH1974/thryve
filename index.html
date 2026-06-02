@@ -21,7 +21,7 @@
     <div id="app-wrapper">
       <div class="app-wrapper">
 
-        <!-- LOGIN SCREEN -->
+     <!-- LOGIN SCREEN -->
         <div id="screen-login" class="screen active">
 
           <div class="login-header">
@@ -38,15 +38,27 @@
               <input type="email" id="login-email" placeholder="your@email.com">
             </div>
 
-           <div style="position:relative;">
-    <input type="password" id="login-password" placeholder="••••••••••" style="width:100%; padding-right:44px; box-sizing:border-box;">
-    <button onclick="togglePassword()" type="button" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; 
-  cursor:pointer; font-size:18px; color:#8a9ab5;">⊙</button>  
-</div>
+            <div class="input-group">
+              <label>Password</label>
+              <div style="position:relative;">
+                <input type="password" id="login-password" placeholder="••••••••••" style="width:100%; padding-right:60px; box-sizing:border-box;">
+                <button onclick="togglePassword()" type="button" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:14px; color:#4a7fc1; font-weight:600;">Show</button>
+              </div>
+              <div style="text-align:right; margin-top:6px;">
+                <a href="#" onclick="forgotPassword()" style="color:#4a7fc1; font-size:14px;">Forgot password?</a>
+              </div>
+            </div>
 
             <button class="btn-primary" onclick="login()">Sign In</button>
-              <p style="text-align:center; margin-top:12px;"><a href="#" onclick="forgotPassword()" style="color:#8a9ab5; font-size:14px;">Forgot password?</a></p>     
-              <p id="login-error" style="color:red; font-size:14px; text-align:center; margin-top:8px;"></p>
+            <p id="login-error" style="color:red; font-size:14px; text-align:center; margin-top:8px;"></p>
+
+            <p style="text-align:center; color:#8a9ab5; font-size:14px; margin-top:24px;">New customer?</p>
+            <button class="btn-secondary" onclick="showScreen('register')">Create your account</button>
+
+          </div>
+
+          <div style="text-align:center; padding:24px 0 16px; color:#8a9ab5; font-size:12px;">
+            <p>© 2026 Thryve Home · <a href="#" style="color:#8a9ab5;">Privacy Policy</a> · <a href="#" style="color:#8a9ab5;">Terms of Service</a></p>
           </div>
 
         </div>
@@ -172,7 +184,7 @@
           </div>
 
         </div>
-        
+
 <!-- INCENTIVE DISCOUNT SCREEN -->
         <div id="screen-incentive" class="screen">
 
