@@ -385,14 +385,15 @@ function renderTimeline() {
 // ─── RENDER DOCUMENTS ────────────────────────────────────
 function renderDocuments() {
     const c = currentCustomer;
+    const t = translations[currentLang];
     document.getElementById('docs-subtitle').textContent = c.name + ' · ' + c.project_number;
 
     const documents = [
-        { category: 'CONTRACT & AGREEMENTS', name: 'Solar installation contract', meta: 'Signed · Jan 14, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
-        { category: null, name: 'Signed proposal', meta: 'Signed · Jan 12, 2025 · PDF', badge: 'Signed', badgeClass: 'badge-signed', available: true },
-        { category: 'PERMITS & APPROVALS', name: 'Building permit application', meta: 'Submitted · Mar 2, 2025 · PDF', badge: 'In review', badgeClass: 'badge-review', available: true },
-        { category: null, name: 'Electrical permit', meta: 'Pending · Not yet available', badge: 'Pending', badgeClass: 'badge-pending', available: false },
-        { category: 'INSPECTION & WARRANTY', name: 'Inspection report', meta: 'Available after inspection', badge: 'Upcoming', badgeClass: 'badge-upcoming', available: false },
+        { category: t.contractAgreements, name: 'Solar installation contract', meta: 'Signed · Jan 14, 2025 · PDF', badge: t.signed, badgeClass: 'badge-signed', available: true },
+        { category: null, name: 'Signed proposal', meta: 'Signed · Jan 12, 2025 · PDF', badge: t.signed, badgeClass: 'badge-signed', available: true },
+        { category: t.permitsApprovals, name: 'Building permit application', meta: 'Submitted · Mar 2, 2025 · PDF', badge: t.inReview, badgeClass: 'badge-review', available: true },
+        { category: null, name: 'Electrical permit', meta: 'Pending · Not yet available', badge: t.pending, badgeClass: 'badge-pending', available: false },
+        { category: t.inspectionWarranty, name: 'Inspection report', meta: 'Available after inspection', badge: t.upcoming, badgeClass: 'badge-upcoming', available: false },
     ];
 
     let html = '';
@@ -421,6 +422,7 @@ function renderDocuments() {
 // ─── RENDER PAYMENTS ─────────────────────────────────────
 function renderPayments() {
     const c = currentCustomer;
+    const t = translations[currentLang];
 
     const financingType = c.financing_type || 'GoodLeap';
     const monthlyPayment = c.monthly_payment || '138';
@@ -435,31 +437,31 @@ function renderPayments() {
     document.getElementById('payments-content').innerHTML = `
         <div class="financing-header">
             <p class="financing-type-label">${financingType} Financing</p>
-            <p class="financing-date">Active since ${financingDate}</p>
+            <p class="financing-date">${t.activeSince} ${financingDate}</p>
         </div>
 
         <div class="payment-grid">
             <div class="payment-stat">
-                <p class="payment-stat-label">Financed amount</p>
+                <p class="payment-stat-label">${t.financedAmount}</p>
                 <p class="payment-stat-value">${financedAmount}</p>
             </div>
             <div class="payment-stat">
-                <p class="payment-stat-label">Monthly payment</p>
+                <p class="payment-stat-label">${t.monthlyPayment}</p>
                 <p class="payment-stat-value">$${monthlyPayment}</p>
             </div>
             <div class="payment-stat">
-                <p class="payment-stat-label">Loan term</p>
+                <p class="payment-stat-label">${t.loanTerm}</p>
                 <p class="payment-stat-value">${loanTerm}</p>
             </div>
             <div class="payment-stat">
-                <p class="payment-stat-label">Payment</p>
+                <p class="payment-stat-label">${t.payment}</p>
                 <p class="payment-stat-value">${currentPayment} of ${totalPayments}</p>
             </div>
         </div>
 
         ${!autopay ? `
         <button class="make-payment-btn" onclick="showPaymentFlow()">
-            Make a Payment
+            ${t.makePayment}
         </button>
         ` : `
         <div class="autopay-badge">✓ Autopay is active</div>
@@ -467,30 +469,30 @@ function renderPayments() {
 
         <div id="payment-flow" style="display:none;">
             <div class="payment-flow-card">
-                <p class="payment-flow-title">Payment Summary</p>
+                <p class="payment-flow-title">${t.paymentSummary}</p>
                 <div class="payment-flow-row">
-                    <span>Monthly payment</span>
+                    <span>${t.monthlyPayment}</span>
                     <span>$${monthlyPayment}</span>
                 </div>
                 <div class="payment-flow-row">
-                    <span>ACH processing fee</span>
+                    <span>${t.achFee}</span>
                     <span>$10.00</span>
                 </div>
                 <div class="payment-flow-row payment-flow-total">
-                    <span>Total</span>
+                    <span>${t.total}</span>
                     <span>$${(parseFloat(monthlyPayment) + 10).toFixed(2)}</span>
                 </div>
-                <p class="payment-flow-label">Select payment method</p>
+                <p class="payment-flow-label">${t.selectPaymentMethod}</p>
                 <div class="payment-methods">
-                    <button class="payment-method-btn">ACH Bank Transfer</button>
-                    <button class="payment-method-btn">Credit / Debit Card</button>
-                    <button class="payment-method-btn">Venmo</button>
+                    <button class="payment-method-btn">${t.achTransfer}</button>
+                    <button class="payment-method-btn">${t.creditDebit}</button>
+                    <button class="payment-method-btn">${t.venmo}</button>
                 </div>
-                <button class="payment-flow-cancel" onclick="hidePaymentFlow()">Cancel</button>
+                <button class="payment-flow-cancel" onclick="hidePaymentFlow()">${t.cancel}</button>
             </div>
         </div>
 
-        <p class="section-label">FINANCING DOCUMENTS</p>
+        <p class="section-label">${t.financingDocuments}</p>
         <div class="doc-row">
             <div class="doc-icon">📄</div>
             <div class="doc-info">
@@ -634,6 +636,7 @@ function setLanguage(lang) {
 
   // Messages screen
   document.querySelector('#screen-messages .header-subtitle').textContent = t.supportTeam;
+  document.querySelector('#screen-messages .header-title').textContent = t.messages;
   document.querySelector('#message-input').placeholder = t.typeMessage;
 
   // Documents screen
