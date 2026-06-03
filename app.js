@@ -521,72 +521,92 @@ function hidePaymentFlow() {
 }
 
 // ─── RENDER MESSAGES ─────────────────────────────────────
-const sessionMessages = [
-    { sender: 'thryve', text: 'Welcome to Thryve Home! Your solar project is underway. Feel free to message us anytime.', time: 'January 22, 2025', type: 'normal' },
-    { type: 'update', label: 'PROJECT UPDATE', text: 'Your permit application has been submitted to the municipality.', time: 'March 2, 2025' },
-    { sender: 'customer', text: 'How long does the permit usually take?', time: 'March 3, 2025', type: 'normal' },
-    { sender: 'thryve', text: 'Typically 2-4 weeks depending on the municipality. We will notify you as soon as it is approved!', time: 'March 3, 2025', type: 'normal' },
-];
-
 function renderMessages() {
-    const html = sessionMessages.map(msg => {
-        if (msg.type === 'update') {
-            return `
-                <div class="message-group">
-                    <div class="bubble-update">
-                        <p class="bubble-update-label">${msg.label}</p>
-                        ${msg.text}
-                    </div>
-                    <p class="msg-meta">${msg.time}</p>
-                </div>
-            `;
-        } else if (msg.sender === 'thryve') {
-            return `
-                <div class="message-group">
-                    <div class="bubble-thryve">${msg.text}</div>
-                    <p class="msg-meta">${msg.time}</p>
-                </div>
-            `;
-        } else {
-            return `
-                <div class="message-group" style="align-items:flex-end;">
-                    <div class="bubble-customer">${msg.text}</div>
-                    <p class="msg-meta msg-meta-right">${msg.time}</p>
-                </div>
-            `;
-        }
-    }).join('');
-
     const body = document.getElementById('messages-body');
-    body.innerHTML = html;
-    body.scrollTop = body.scrollHeight;
+    body.innerHTML = '<p style="text-align:center; color:#8a9ab5; padding:20px;">Loading messages...</p>';
+    
+    loadMessagesFromSupabase();
+}
+
+async function loadMessagesFromSupabase() {
+    const body = document.getElementById('messages-body');
+    
+    try {
+        const { data, error } = await db
+            .from('messages')
+            .select('*')
+            .eq('customer_id', currentCustomer.id)
+            .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        const html = data.map(msg => {
+            const time = new Date(msg.created_at).toLocaleDateString('en-US', { 
+                month: 'long', day: 'numeric', year: 'numeric' 
+            });
+
+            if (msg.is_update) {
+                return `
+                    <div class="message-group">
+                        <div class="bubble-update">
+                            <p class="bubble-update-label">PROJECT UPDATE</p>
+                            ${msg.message}
+                        </div>
+                        <p class="msg-meta">${time}</p>
+                    </div>
+                `;
+            } else if (msg.sender === 'support') {
+                return `
+                    <div class="message-group">
+                        <div class="bubble-thryve">${msg.message}</div>
+                        <p class="msg-meta">${time}</p>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="message-group" style="align-items:flex-end;">
+                        <div class="bubble-customer">${msg.message}</div>
+                        <p class="msg-meta msg-meta-right">${time}</p>
+                    </div>
+                `;
+            }
+        }).join('');
+
+        body.innerHTML = html;
+        body.scrollTop = body.scrollHeight;
+
+    } catch (err) {
+        body.innerHTML = '<p style="text-align:center; color:red; padding:20px;">Could not load messages.</p>';
+        console.error('Messages error:', err);
+    }
 }
 
 // ─── SEND MESSAGE ─────────────────────────────────────────
-function sendMessage() {
+async function sendMessage() {
     const input = document.getElementById('message-input');
     const text = input.value.trim();
     if (!text) return;
 
-    sessionMessages.push({
-        sender: 'customer',
-        text: text,
-        time: 'Just now',
-        type: 'normal'
-    });
+    input.value = '';
 
- input.value = '';
-    renderMessages();
+    try {
+        const { error } = await db
+            .from('messages')
+            .insert({
+                customer_id: currentCustomer.id,
+                sender: 'customer',
+                message: text,
+                is_update: false
+            });
 
-    setTimeout(() => {
-        sessionMessages.push({
-            sender: 'thryve',
-            text: 'Thanks for reaching out! A member of our team will respond within 1 business day.',
-            time: 'Just now',
-            type: 'normal'
-        });
-        renderMessages();
-    }, 1000);
+        if (error) throw error;
+
+        await loadMessagesFromSupabase();
+
+    } catch (err) {
+        console.error('Send message error:', err);
+        alert('Could not send message. Please try again.');
+    }
 }
 
 // ─── LOGOUT ──────────────────────────────────────────────

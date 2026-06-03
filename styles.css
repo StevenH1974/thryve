@@ -134,7 +134,7 @@ input:focus {
 .screen {
     display: none;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .screen.active {
@@ -715,6 +715,7 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: calc(100vh - 280px);
 }
 
 .message-group {
