@@ -251,6 +251,83 @@
 
         </div>
 
+<!-- CONTRACTOR DASHBOARD SCREEN -->
+        <div id="screen-contractor" class="screen">
+
+          <div class="header">
+            <div class="header-top">
+              <div>
+                <p class="header-greeting">Contractor Portal</p>
+                <p class="header-name">Thryve Home</p>
+              </div>
+              <div id="contractor-avatar" class="avatar"></div>
+            </div>
+          </div>
+
+          <div class="scroll-content">
+
+            <div class="card">
+              <div class="card-header">
+                <p class="card-title">All Customers</p>
+              </div>
+              <div id="contractor-customer-list"></div>
+            </div>
+
+            <button onclick="logout()" class="btn-signout">Sign Out</button>
+
+          </div>
+
+        </div>
+
+<!-- CONTRACTOR CUSTOMER DETAIL SCREEN -->
+        <div id="screen-contractor-detail" class="screen">
+
+          <div class="header">
+            <div class="header-top">
+              <div class="back-btn" onclick="showScreen('contractor')">←</div>
+              <p class="header-title" id="contractor-detail-name">Customer</p>
+              <div style="width:32px;"></div>
+            </div>
+            <p class="header-subtitle" id="contractor-detail-project"></p>
+          </div>
+
+          <div class="scroll-content">
+
+            <div class="card">
+              <p class="card-title" style="margin-bottom:12px;">Project Stage</p>
+              <select id="contractor-stage-select" style="width:100%; padding:12px; border-radius:8px; border:1px solid #e2eaf5; font-size:15px; color:#1a3a6b;">
+                <option>Financing approved</option>
+                <option>Contract signed</option>
+                <option>Site survey scheduled</option>
+                <option>Permit application submitted</option>
+                <option>Application submitted</option>
+                <option>Installation scheduled</option>
+                <option>Installation complete</option>
+                <option>PTO approved</option>
+                <option>System turned on</option>
+              </select>
+              <button class="btn-primary" style="margin-top:12px;" onclick="updateCustomerStage()">Update Stage</button>
+            </div>
+
+            <div class="card" style="margin-top:16px;">
+              <p class="card-title" style="margin-bottom:12px;">Messages</p>
+              <div id="contractor-messages-list" style="max-height:300px; overflow-y:auto;"></div>
+              <div style="display:flex; gap:8px; margin-top:12px;">
+                <input type="text" id="contractor-message-input" placeholder="Reply to customer..." class="message-input">
+                <button class="message-send-btn" onclick="contractorSendMessage()">➤</button>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:16px;">
+              <p class="card-title" style="margin-bottom:12px;">Upload Document</p>
+              <input type="file" id="contractor-file-input" style="margin-bottom:12px;">
+              <button class="btn-primary" onclick="uploadDocument()">Upload</button>
+            </div>
+
+          </div>
+
+        </div>
+
         <!-- NAVIGATION BAR -->
         <div class="nav-bar" id="nav-bar" style="display:none;">
           <div class="nav-item" onclick="showScreen('dashboard')" id="nav-home">

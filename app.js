@@ -223,7 +223,7 @@ function showScreen(screenName) {
 
     // Show nav bar on all screens except login
     const navBar = document.getElementById('nav-bar');
-    navBar.style.display = screenName === 'login' ? 'none' : 'flex';
+    navBar.style.display = (screenName === 'login' || screenName === 'contractor' || screenName === 'contractor-detail') ? 'none' : 'flex';
 
     // Update active nav item
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -263,7 +263,159 @@ async function login() {
     }
 
     currentCustomer = customerData;
-    loadDashboard();
+
+    if (customerData.role === 'contractor') {
+        loadContractorDashboard();
+    } else {
+        loadDashboard();
+    }
+}
+
+// ─── CONTRACTOR DASHBOARD ─────────────────────────────────
+async function loadContractorDashboard() {
+    const c = currentCustomer;
+    document.getElementById('contractor-avatar').textContent = c.name.split(' ').map(n => n[0]).join('');
+
+    // Load all customers from database
+    const { data, error } = await db
+        .from('customers')
+        .select('*')
+        .eq('role', 'customer')
+        .order('name', { ascending: true });
+
+    if (error) {
+        console.error('Error loading customers:', error);
+        return;
+    }
+
+    const list = document.getElementById('contractor-customer-list');
+    
+    if (data.length === 0) {
+        list.innerHTML = '<p style="padding:16px; color:#8a9ab5;">No customers found.</p>';
+    } else {
+        list.innerHTML = data.map(customer => `
+            <div class="doc-row" style="cursor:pointer;" onclick="selectCustomer(${customer.id})">
+                <div class="avatar" style="width:36px; height:36px; font-size:13px; flex-shrink:0;">
+                    ${customer.name.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div class="doc-info">
+                    <p class="doc-name">${customer.name}</p>
+                    <p class="doc-meta">${customer.stage || 'No stage set'} · ${customer.project_number || 'No project number'}</p>
+                </div>
+                <span style="color:#8a9ab5; font-size:18px;">›</span>
+            </div>
+        `).join('');
+    }
+
+    showScreen('contractor');
+}
+
+let selectedCustomer = null;
+
+async function selectCustomer(customerId) {
+    const { data, error } = await db
+        .from('customers')
+        .select('*')
+        .eq('id', customerId)
+        .single();
+
+    if (error || !data) {
+        alert('Could not load customer data.');
+        return;
+    }
+
+    selectedCustomer = data;
+
+    document.getElementById('contractor-detail-name').textContent = data.name;
+    document.getElementById('contractor-detail-project').textContent = data.project_number || '';
+
+    // Set stage dropdown to current stage
+    const select = document.getElementById('contractor-stage-select');
+    for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === data.stage) {
+            select.selectedIndex = i;
+            break;
+        }
+    }
+
+    // Load messages for this customer
+    await loadContractorMessages(customerId);
+
+    showScreen('contractor-detail');
+}
+
+async function loadContractorMessages(customerId) {
+    const { data, error } = await db
+        .from('messages')
+        .select('*')
+        .eq('customer_id', customerId)
+        .order('created_at', { ascending: true });
+
+    if (error) return;
+
+    const list = document.getElementById('contractor-messages-list');
+    list.innerHTML = data.map(msg => {
+        const time = new Date(msg.created_at).toLocaleDateString('en-US', {
+            month: 'long', day: 'numeric', year: 'numeric'
+        });
+        if (msg.sender === 'customer') {
+            return `<div style="margin-bottom:8px;">
+                <div style="background:#f0f4fa; padding:10px 14px; border-radius:12px; font-size:14px;">${msg.message}</div>
+                <p style="font-size:11px; color:#8a9ab5; margin-top:2px;">${time}</p>
+            </div>`;
+        } else {
+            return `<div style="margin-bottom:8px;">
+                <div style="background:#1a3a6b; color:white; padding:10px 14px; border-radius:12px; font-size:14px;">${msg.message}</div>
+                <p style="font-size:11px; color:#8a9ab5; margin-top:2px;">${time}</p>
+            </div>`;
+        }
+    }).join('');
+    list.scrollTop = list.scrollHeight;
+}
+
+async function updateCustomerStage() {
+    const newStage = document.getElementById('contractor-stage-select').value;
+    
+    const { error } = await db
+        .from('customers')
+        .update({ stage: newStage })
+        .eq('id', selectedCustomer.id);
+
+    if (error) {
+        alert('Could not update stage. Please try again.');
+        return;
+    }
+
+    selectedCustomer.stage = newStage;
+    alert('Stage updated successfully!');
+}
+
+async function contractorSendMessage() {
+    const input = document.getElementById('contractor-message-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+
+    const { error } = await db
+        .from('messages')
+        .insert({
+            customer_id: selectedCustomer.id,
+            sender: 'support',
+            message: text,
+            is_update: false
+        });
+
+    if (error) {
+        alert('Could not send message. Please try again.');
+        return;
+    }
+
+    await loadContractorMessages(selectedCustomer.id);
+}
+
+async function uploadDocument() {
+    alert('Document upload coming soon.');
 }
 
 function loadDashboard() {
