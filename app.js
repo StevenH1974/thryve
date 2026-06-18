@@ -623,8 +623,9 @@ async function renderDocuments() {
                 .from('customer-documents')
                 .getPublicUrl(doc.file_path);
             const url = urlData.publicUrl;
+            const safeUrl = url.replace(/'/g, "\\'");
             html += `
-                <div class="doc-row" style="cursor:pointer;" onclick="window.open('${url}', '_blank')">
+                <div class="doc-row" style="cursor:pointer;" onclick="window.open('${safeUrl}', '_blank')">
                     <div class="doc-icon">📄</div>
                     <div class="doc-info">
                         <p class="doc-name">${doc.file_name}</p>
