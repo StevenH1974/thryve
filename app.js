@@ -223,7 +223,7 @@ function showScreen(screenName) {
 
     // Show nav bar on all screens except login
     const navBar = document.getElementById('nav-bar');
-    navBar.style.display = (screenName === 'login' || screenName === 'contractor' || screenName === 'contractor-detail') ? 'none' : 'flex';
+    navBar.style.display = (screenName === 'login' || screenName === 'register' || screenName === 'contractor' || screenName === 'contractor-detail') ? 'none' : 'flex';
 
     // Update active nav item
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -905,6 +905,81 @@ function togglePassword() {
     input.type = 'password';
     btn.textContent = 'Show';
   }
+}
+
+// ─── REGISTER ─────────────────────────────────────────────
+async function register() {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const project = document.getElementById('reg-project').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirm = document.getElementById('reg-confirm').value;
+    const errorEl = document.getElementById('reg-error');
+
+    errorEl.textContent = '';
+
+    // Basic validation
+    if (!name || !email || !project || !password || !confirm) {
+        errorEl.textContent = 'Please fill in all fields.';
+        return;
+    }
+
+    if (password !== confirm) {
+        errorEl.textContent = 'Passwords do not match.';
+        return;
+    }
+
+    if (password.length < 6) {
+        errorEl.textContent = 'Password must be at least 6 characters.';
+        return;
+    }
+
+    // Check project number exists in customers table
+    const { data: customerData, error: customerError } = await db
+        .from('customers')
+        .select('*')
+        .eq('project_number', project)
+        .single();
+
+    if (customerError || !customerData) {
+        errorEl.textContent = 'Project number not found. Please check and try again.';
+        return;
+    }
+
+    if (customerData.user_id) {
+        errorEl.textContent = 'An account already exists for this project number.';
+        return;
+    }
+
+    // Create Supabase auth account
+    const { data: authData, error: authError } = await db.auth.signUp({
+        email: email,
+        password: password
+    });
+
+    if (authError) {
+        errorEl.textContent = authError.message;
+        return;
+    }
+
+    // Link auth account to customer row
+    const { error: updateError } = await db
+        .from('customers')
+        .update({ 
+            user_id: authData.user.id,
+            email: email,
+            name: name
+        })
+        .eq('project_number', project);
+
+    if (updateError) {
+        errorEl.textContent = 'Account created but could not link to project. Please contact support.';
+        return;
+    }
+
+    // Log them in automatically
+    currentCustomer = { ...customerData, user_id: authData.user.id, email: email, name: name };
+    loadDashboard();
 }
 
 // ─── FORGOT PASSWORD ──────────────────────────────────────
