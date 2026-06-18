@@ -217,7 +217,7 @@ function showScreen(screenName) {
     document.getElementById('screen-' + screenName).classList.add('active');
     window.scrollTo(0, 0);
     if (screenName === 'timeline')   renderTimeline();
-    if (screenName === 'documents')  renderDocuments();
+   if (screenName === 'documents')  renderDocuments().catch(console.error);
     if (screenName === 'payments')   renderPayments();
     if (screenName === 'messages')   renderMessages();
 
@@ -415,7 +415,45 @@ async function contractorSendMessage() {
 }
 
 async function uploadDocument() {
-    alert('Document upload coming soon.');
+    const fileInput = document.getElementById('contractor-file-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please choose a file first.');
+        return;
+    }
+
+    const filePath = `${selectedCustomer.id}/${Date.now()}_${file.name}`;
+
+    const { data, error } = await db.storage
+        .from('customer-documents')
+        .upload(filePath, file);
+
+    if (error) {
+        alert('Upload failed. Please try again.');
+        console.error('Upload error:', error);
+        return;
+    }
+
+  // Save record to documents table
+    const { data: docData, error: dbError } = await db
+        .from('documents')
+        .insert({
+            customer_id: selectedCustomer.id,
+            file_name: file.name,
+            file_path: filePath,
+            category: 'CONTRACT & AGREEMENTS',
+            uploaded_by: 'contractor'
+        });
+
+    if (dbError) {
+        console.error('Document record error:', dbError);
+        alert('File uploaded but record failed: ' + dbError.message);
+        return;
+    }
+
+    alert('Document uploaded successfully!');
+    fileInput.value = '';
 }
 
 function loadDashboard() {
@@ -535,12 +573,13 @@ function renderTimeline() {
 }
 
 // ─── RENDER DOCUMENTS ────────────────────────────────────
-function renderDocuments() {
+async function renderDocuments() {
     const c = currentCustomer;
     const t = translations[currentLang];
     document.getElementById('docs-subtitle').textContent = c.name + ' · ' + c.project_number;
 
-    const documents = [
+    // Hardcoded documents
+    const staticDocs = [
         { category: t.contractAgreements, name: 'Solar installation contract', meta: 'Signed · Jan 14, 2025 · PDF', badge: t.signed, badgeClass: 'badge-signed', available: true },
         { category: null, name: 'Signed proposal', meta: 'Signed · Jan 12, 2025 · PDF', badge: t.signed, badgeClass: 'badge-signed', available: true },
         { category: t.permitsApprovals, name: 'Building permit application', meta: 'Submitted · Mar 2, 2025 · PDF', badge: t.inReview, badgeClass: 'badge-review', available: true },
@@ -548,10 +587,18 @@ function renderDocuments() {
         { category: t.inspectionWarranty, name: 'Inspection report', meta: 'Available after inspection', badge: t.upcoming, badgeClass: 'badge-upcoming', available: false },
     ];
 
+    // Fetch uploaded documents from Supabase
+    const { data: uploadedDocs, error } = await db
+        .from('documents')
+        .select('*')
+        .eq('customer_id', c.id)
+        .order('created_at', { ascending: false });
+
     let html = '';
     let lastCategory = null;
 
-    documents.forEach(doc => {
+    // Render static docs
+    staticDocs.forEach(doc => {
         if (doc.category && doc.category !== lastCategory) {
             html += `<p class="doc-category">${doc.category}</p>`;
             lastCategory = doc.category;
@@ -567,6 +614,27 @@ function renderDocuments() {
             </div>
         `;
     });
+
+    // Render uploaded docs
+    if (uploadedDocs && uploadedDocs.length > 0) {
+        html += `<p class="doc-category">UPLOADED DOCUMENTS</p>`;
+        uploadedDocs.forEach(doc => {
+            const { data: urlData } = db.storage
+                .from('customer-documents')
+                .getPublicUrl(doc.file_path);
+            const url = urlData.publicUrl;
+            html += `
+                <div class="doc-row" style="cursor:pointer;" onclick="window.open('${url}', '_blank')">
+                    <div class="doc-icon">📄</div>
+                    <div class="doc-info">
+                        <p class="doc-name">${doc.file_name}</p>
+                        <p class="doc-meta">Uploaded by ${doc.uploaded_by}</p>
+                    </div>
+                    <span style="color:#8a9ab5; font-size:18px;">›</span>
+                </div>
+            `;
+        });
+    }
 
     document.getElementById('docs-list').innerHTML = html;
 }
