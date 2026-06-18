@@ -67,6 +67,53 @@
             <p>© 2026 Thryve Home · <a href="#" style="color:#8a9ab5;">Privacy Policy</a> · <a href="#" style="color:#8a9ab5;">Terms of Service</a></p>
           </div>
 
+       </div>
+
+        <!-- REGISTER SCREEN -->
+        <div id="screen-register" class="screen">
+
+          <div class="login-header">
+            <h1>THRYVE HOME</h1>
+            <p class="portal-label">CUSTOMER PORTAL</p>
+          </div>
+
+          <div class="login-card">
+            <h2>Create your account</h2>
+            <p class="subtitle">Enter your details to get started</p>
+
+            <div class="input-group">
+              <label>Full name</label>
+              <input type="text" id="reg-name" placeholder="Your full name">
+            </div>
+
+            <div class="input-group">
+              <label>Email address</label>
+              <input type="email" id="reg-email" placeholder="your@email.com">
+            </div>
+
+            <div class="input-group">
+              <label>Project number</label>
+              <input type="text" id="reg-project" placeholder="e.g. THR-2024-0847">
+            </div>
+
+            <div class="input-group">
+              <label>Password</label>
+              <input type="password" id="reg-password" placeholder="Create a password">
+            </div>
+
+            <div class="input-group">
+              <label>Confirm password</label>
+              <input type="password" id="reg-confirm" placeholder="Confirm your password">
+            </div>
+
+            <button class="btn-primary" onclick="register()">Create Account</button>
+            <p id="reg-error" style="color:red; font-size:14px; text-align:center; margin-top:8px;"></p>
+            <p style="text-align:center; margin-top:12px;">
+              <a href="#" onclick="showScreen('login')" style="color:#4a7fc1; font-size:14px;">Back to sign in</a>
+            </p>
+
+          </div>
+
         </div>
 
 <!-- DASHBOARD SCREEN -->
