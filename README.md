@@ -15,19 +15,19 @@ a portal to manage documents, update project stages, and communicate with custom
 ## Screenshots
 
 ### Customer Portal
-![Login](screenshots/login-screen.png)
-![Dashboard](screenshots/dashboard.png)
-![Timeline](screenshots/timeline-1.png)
-![Timeline](screenshots/timeline-2.png)
-![Documents](screenshots/documents.png)
-![Payments](screenshots/payments-1.png)
-![Payments](screenshots/payments-2.png)
-![Messages](screenshots/messages.png)
-![Incentive Discount](screenshots/incentive-discount.png)
+![Login](screenshots/login-screen.PNG)
+![Dashboard](screenshots/dashboard.PNG)
+![Timeline](screenshots/timeline-1.PNG)
+![Timeline](screenshots/timeline-2.PNG)
+![Documents](screenshots/documents.PNG)
+![Payments](screenshots/payments-1.PNG)
+![Payments](screenshots/payments-2.PNG)
+![Messages](screenshots/messages.PNG)
+![Incentive Discount](screenshots/incentive-discount.PNG)
 
 ### Contractor Portal
-![Contractor Dashboard](screenshots/contractor-dashboard.png)
-![Contractor Detail](screenshots/contractor-customer-detail.png)
+![Contractor Dashboard](screenshots/contractor-dashboard.PNG)
+![Contractor Detail](screenshots/contractor-customer-detail.PNG)
 
 ## Features
 
